@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <h1>しりとり</h1>
+  <p id="previousWord"></p>
+  <input id="nextWordInput" type="text" />
+  <button id="nextWordSendButton">送信</button>
+  <button id="resetButton">リセット</button>
+
+  <script type="module">
+    window.onload = async (event) => {
+      //サーバーにGETで送信
+      const response = await fetch("/shiritori");
+      const previousWord = await response.text();
+      const para = document.querySelector("#previousWord");
+      para.innerText = `前の単語：${previousWord}`;
+    };
+
+    //送信ボタンの処理
+    document.querySelector("#nextWordSendButton").onclick = async (event) => {
+      const nextWord = document.querySelector("#nextWordInput").value;
+
+      //送信後に入力欄を空白にする
+      document.querySelector("#nextWordInput").value = "";
+
+      //次の単語をJSON形式でサーバーにPOSTで送信
+      const response = await fetch("/shiritori", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nextWord })
+      });
+
+      //サーバーからエラーが返ってきた場合に，ダイアログでエラーを表示
+      if (response.status / 100 !== 2) {
+          alert(await response.text());
+          return;
+      }
+
+      const previousWord = await response.text();
+      const para = document.querySelector("#previousWord");
+      para.innerText = `前の単語：${previousWord}`;
+    };
+
+    //リセットボタンの処理
+    document.querySelector("#resetButton").onclick = async (event) => {
+      const nextWord = "reset";
+
+      const response = await fetch("/shiritori", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nextWord })
+      });
+
+      const previousWord = await response.text();
+      const para = document.querySelector("#previousWord");
+      para.innerText = `前の単語：${previousWord}`;
+      alert("リセットされたよ");
+    }
+  </script>
+</body>
+</html>
