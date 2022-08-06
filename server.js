@@ -24,8 +24,7 @@ serve(async (req) => {
 
   //サーバーに来るリクエストがPOST通信であるかどうか判断
   if (req.method === "POST" && pathname === "/shiritori"){
-    //クライアントから送られて来た次の単語をrequestJsonに格納
-    const requestJson = await req.json();
+    const requestJson = await req.json(); //クライアントから送られて来た次の単語をrequestJsonに格納
     const nextWord = requestJson.nextWord;
 
     //"reset"の文字列が送信されたら
