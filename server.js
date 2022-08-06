@@ -55,7 +55,7 @@ serve(async (req) => {
       return new Response("ひらがなで入力してね", { status: 400 });
     } else if(nextWord.length > 0 && previousWord.charAt(previousWord.length - 1) !== nextWord.charAt(0)) {
       return new Response("前の単語に続いてないよ", { status: 400 });
-    } else if(nextWord.length > 0 && nextWord.charAt(nextWord.length - 1) === 'ん'){ //単語の語に’ん’がついたら
+    } else if(nextWord.length > 0 && nextWord.charAt(nextWord.length - 1) === 'ん'){ //単語の語に’ん’がついたらエラー
       return new Response("’ん’がついてるよ", { status: 400 });
     }
 
